@@ -1,0 +1,23 @@
+# macOS
+*.DS_Store
+
+# Swift Package Manager
+/.build/
+/Packages/
+Package.pins
+Package.resolved
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+
+# Xcode
+.xcuserdata/
+*.xcodeproj
+!default.xcodeproj
+*.xcworkspace
+!default.xcworkspace
+*.xcuserstate
+DerivedData/
+*.hmap
+
+# Others
+.idea/
+.vscode/
