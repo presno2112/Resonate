@@ -12,6 +12,7 @@ struct ProfileView: View {
         VStack{
             ProfilePic()
                 .padding(.top, 65)
+            CarouselView()
             Spacer()
         }
     }
