@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProfileView: View {
+struct ProfilePic: View {
     @State var fullname: String = ""
     @State var username: String = ""
     @State var description: String = ""
@@ -56,5 +56,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+    ProfilePic()
 }

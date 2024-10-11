@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct ProfileView: View {
     var body: some View {
         VStack{
-            ProfileView()
+            ProfilePic()
                 .padding(.top, 65)
             Spacer()
         }
@@ -18,5 +18,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ProfileView()
 }
