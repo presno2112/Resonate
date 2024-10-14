@@ -16,34 +16,18 @@ struct ResonateView: View {
             VStack {
                 ScrollView {
                     VStack(spacing: 20) {
-                        // Connected Peers Section
-                        if !localNetwork.connectedDevices.isEmpty {
-                            Text("Connected")
-                                .font(.headline)
-                                .padding(.top)
-
-                            ForEach(Array(localNetwork.connectedDevices), id: \.self) { peerID in
-                                AnimatedPeerBubble(peerName: peerID.displayName) {
-                                    // Action for the send button
-                                    if let firstConnected = localNetwork.connectedDevices.first {
-                                        try? localNetwork.sendMessage(inputText, to: firstConnected)
-                                    }
-                                }
-                            }
-                        }
 
                         // Other Peers on the Network Section
                         if !localNetwork.otherDevices.isEmpty {
                             Text("On my network")
                                 .font(.headline)
                                 .padding(.top)
-
-                            ForEach(Array(localNetwork.otherDevices), id: \.self) { peerID in
-                                AnimatedPeerBubble(peerName: peerID.displayName) {
-                                    // Action for invite and send
-                                    localNetwork.invitePeer(peerID: peerID)
-                                    if let firstConnected = localNetwork.connectedDevices.first {
-                                        try? localNetwork.sendMessage(inputText, to: firstConnected)
+                            HStack {
+                                ForEach(Array(localNetwork.otherDevices), id: \.self) { peerID in
+                                    AnimatedPeerBubble(peerName: peerID.displayName) {
+                                        // Invite peer and automatically send message after connection
+                                        localNetwork.messageToSend = inputText
+                                        localNetwork.invitePeer(peerID: peerID)
                                     }
                                 }
                             }
@@ -65,8 +49,7 @@ struct ResonateView: View {
                         .padding()
                     
                     Button("Send") {
-                        guard let peerID = localNetwork.connectedDevices.first else { return }
-                        try? localNetwork.sendMessage(inputText, to: peerID)
+                        localNetwork.messageToSend = inputText
                     }
                     .buttonStyle(.borderedProminent)
                 }

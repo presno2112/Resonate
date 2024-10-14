@@ -20,6 +20,7 @@ class LocalNetworkSessionCoordinator: NSObject, ObservableObject, MCSessionDeleg
     }
     
     @Published private(set) var receivedMessage: String = ""  // For SwiftUI to observe received messages
+    @Published var messageToSend: String = ""
     
     init(peerID: MCPeerID = .init(displayName: UIDevice.current.name)) {
         advertiser = .init(peer: peerID, discoveryInfo: nil, serviceType: "sendMessage")
@@ -64,6 +65,11 @@ class LocalNetworkSessionCoordinator: NSObject, ObservableObject, MCSessionDeleg
         DispatchQueue.main.async {
             if state == .connected {
                 self.connectedDevices.insert(peerID)
+                
+                // Automatically send a message to the connected peer
+                if !self.messageToSend.isEmpty {
+                    try? self.sendMessage(self.messageToSend, to: peerID)
+                }
             } else {
                 self.connectedDevices.remove(peerID)
             }
