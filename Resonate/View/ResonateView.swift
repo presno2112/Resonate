@@ -9,14 +9,12 @@ import SwiftUI
 
 struct ResonateView: View {
     @StateObject private var localNetwork = LocalNetworkSessionCoordinator()
-    @State private var inputText: String = "" // State for the input message
     
     var body: some View {
         NavigationStack {
             VStack {
                 ScrollView {
                     VStack(spacing: 20) {
-
                         // Other Peers on the Network Section
                         if !localNetwork.otherDevices.isEmpty {
                             Text("On my network")
@@ -25,8 +23,7 @@ struct ResonateView: View {
                             HStack {
                                 ForEach(Array(localNetwork.otherDevices), id: \.self) { peerID in
                                     AnimatedPeerBubble(peerName: peerID.displayName) {
-                                        // Invite peer and automatically send message after connection
-                                        localNetwork.messageToSend = inputText
+                                        // Invite peer and send artist array after connection
                                         localNetwork.invitePeer(peerID: peerID)
                                     }
                                 }
@@ -37,23 +34,17 @@ struct ResonateView: View {
                 }
                 .navigationTitle("Local Chat")
                 
-                // Display the received message
-                Text("Received: \(localNetwork.receivedMessage)")
-                    .padding()
-                    .font(.headline)
-                
-                // Text input field for sending custom message
-                HStack {
-                    TextField("Enter your message", text: $inputText)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                // Display the first received artist's name (as a test)
+                    Text("\(                 calculateArtistSimilarityPercentage(array1: localNetwork.receivedArtists, array2: ArtistViewModel().artists))%")
+                if let firstArtist = localNetwork.receivedArtists.first {
+                    Text("Received Artist: \(firstArtist.name)")
                         .padding()
-                    
-                    Button("Send") {
-                        localNetwork.messageToSend = inputText
-                    }
-                    .buttonStyle(.borderedProminent)
+                        .font(.headline)
+                } else {
+                    Text("No artist received yet")
+                        .padding()
+                        .font(.headline)
                 }
-                .padding()
             }
         }
         .onAppear {

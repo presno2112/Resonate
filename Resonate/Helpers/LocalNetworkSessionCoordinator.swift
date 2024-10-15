@@ -15,16 +15,16 @@ class LocalNetworkSessionCoordinator: NSObject, ObservableObject, MCSessionDeleg
     
     @Published private(set) var allDevices: Set<MCPeerID> = []
     @Published private(set) var connectedDevices: Set<MCPeerID> = []
+    @Published private(set) var receivedArtists: [Artist] = [] // Received array of artists
     var otherDevices: Set<MCPeerID> {
         return allDevices.subtracting(connectedDevices)
     }
     
-    @Published private(set) var receivedMessage: String = ""  // For SwiftUI to observe received messages
-    @Published var messageToSend: String = ""
+    @Published var artistsToSend: [Artist] = Artist.sampleData // Artists to send
     
     init(peerID: MCPeerID = .init(displayName: UIDevice.current.name)) {
-        advertiser = .init(peer: peerID, discoveryInfo: nil, serviceType: "sendMessage")
-        browser = .init(peer: peerID, serviceType: "sendMessage")
+        advertiser = .init(peer: peerID, discoveryInfo: nil, serviceType: "sendArtists")
+        browser = .init(peer: peerID, serviceType: "sendArtists")
         session = .init(peer: peerID)
         super.init()
         
@@ -53,11 +53,11 @@ class LocalNetworkSessionCoordinator: NSObject, ObservableObject, MCSessionDeleg
         browser.invitePeer(peerID, to: session, withContext: nil, timeout: 120)
     }
     
-    public func sendMessage(_ message: String, to peerID: MCPeerID) throws {
-        guard let messageData = message.data(using: .utf8) else {
-            throw NSError(domain: "MessageEncoding", code: 0, userInfo: nil)
-        }
-        try session.send(messageData, toPeers: [peerID], with: .reliable)
+    // Send artist array to a peer
+    public func sendArtists(to peerID: MCPeerID) throws {
+        let encoder = JSONEncoder()
+        let artistData = try encoder.encode(artistsToSend) // Convert array to Data
+        try session.send(artistData, toPeers: [peerID], with: .reliable)
     }
     
     // MARK: - MCSessionDelegate Methods
@@ -66,10 +66,8 @@ class LocalNetworkSessionCoordinator: NSObject, ObservableObject, MCSessionDeleg
             if state == .connected {
                 self.connectedDevices.insert(peerID)
                 
-                // Automatically send a message to the connected peer
-                if !self.messageToSend.isEmpty {
-                    try? self.sendMessage(self.messageToSend, to: peerID)
-                }
+                // Automatically send artists to the connected peer
+                try? self.sendArtists(to: peerID)
             } else {
                 self.connectedDevices.remove(peerID)
             }
@@ -77,11 +75,14 @@ class LocalNetworkSessionCoordinator: NSObject, ObservableObject, MCSessionDeleg
         }
     }
     
+    // Handle received data
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        guard let text = String(data: data, encoding: .utf8) else { return }
-        DispatchQueue.main.async {
-            self.receivedMessage = "\(peerID.displayName) => \(text)"
-            self.objectWillChange.send()  // Notify SwiftUI to update the view
+        let decoder = JSONDecoder()
+        if let receivedArtists = try? decoder.decode([Artist].self, from: data) {
+            DispatchQueue.main.async {
+                self.receivedArtists = receivedArtists
+                self.objectWillChange.send()  // Notify SwiftUI to update the view
+            }
         }
     }
     
@@ -112,4 +113,3 @@ extension LocalNetworkSessionCoordinator: MCNearbyServiceBrowserDelegate {
         }
     }
 }
-

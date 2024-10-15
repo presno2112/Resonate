@@ -43,9 +43,12 @@ struct ResonateButton: View {
             Button{
                 
             }label: { //Missing image
-                Circle()
-                    .frame(width: 200, height: 200)
+                Image("Logo")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 220, height: 220)
                     .foregroundStyle(.purple)
+                
             }
         }
     }
