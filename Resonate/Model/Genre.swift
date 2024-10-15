@@ -16,3 +16,12 @@ struct Genre: Identifiable, Codable, Equatable {
         return lhs.id == rhs.id
     }
 }
+
+extension Genre {
+    static let sampleGenres: [Genre] = [
+        Genre(name: "Rock", image: "rock_icon"),
+        Genre(name: "Pop", image: "pop_icon"),
+        Genre(name: "Classical", image: "classical_icon"),
+        Genre(name: "Electronic", image: "electronic_icon")
+    ]
+}

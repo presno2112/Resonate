@@ -12,7 +12,7 @@ import SwiftUI
 class ArtistViewModel: ObservableObject {
     @Published var artists: [Artist]
     
-    init(artists: [Artist] = []) {
+    init(artists: [Artist] = Artist.sampleData) {
         self.artists = artists
     }
     
