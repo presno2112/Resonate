@@ -11,10 +11,10 @@ struct CustomButtonDark: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.headline)
-            .foregroundColor(Color("terciary"))
+            .foregroundColor(Color("aux1"))
             .padding()
             .frame(maxWidth: .infinity)
-            .background(Color("aux1"))
+            .background(Color("terciary"))
             .clipShape(RoundedRectangle(cornerRadius: 80))
             .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
             .shadow(radius: configuration.isPressed ? 0 : 5)

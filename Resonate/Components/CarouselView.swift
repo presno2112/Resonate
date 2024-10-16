@@ -33,6 +33,7 @@ struct ArtistView: View {
 struct ArtistsCarousel: View {
     @State private var elements: [carouselElement] = []
     @State var title: String = ""
+    @Binding var show: Bool
     
     var body: some View {
             HStack(alignment: .top, spacing: 10) {
@@ -40,11 +41,15 @@ struct ArtistsCarousel: View {
                     Text(title)
                         .font(.headline)
                         .padding(.bottom, 5)
-                    Button(action: addElement) {
+                    Button{
+                        show = true
+                    }label: {
                         Text("+")
+                            .font(.largeTitle)
+                            .bold()
                             .frame(width: 60, height: 60)
-                            .background(Color.black)
-                            .foregroundColor(.white)
+                            .background(Color("aux1"))
+                            .foregroundStyle(Color("terciary"))
                             .clipShape(Circle())
                     }
                 }
@@ -73,8 +78,8 @@ struct ArtistsCarousel: View {
 struct CarouselView: View {
     var body: some View {
         VStack {
-            ArtistsCarousel(title: "Artists")
-            ArtistsCarousel(title: "History")
+            ArtistsCarousel(title: "Artists", show: .constant(false))
+            ArtistsCarousel(title: "History", show: .constant(false))
         }
     }
 }

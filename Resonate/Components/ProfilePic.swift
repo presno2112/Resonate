@@ -8,53 +8,77 @@
 import SwiftUI
 
 struct ProfilePic: View {
-    @State var fullname: String = ""
-    @State var username: String = ""
-    @State var description: String = ""
-    @State var profileImage: Image?
+    var user: User // Accepting User object
+
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.blue)
-                .frame(width: 330, height: 180)
-            if let profileImage = profileImage {
-                profileImage
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 150, height: 150)
-                    .clipShape(Circle())
-                    .offset(y: -100)
-            } else {
-                ZStack {
+        VStack {
+            // Top section with the purple background
+            ZStack {
+                Color("aux1")
+                    .frame(height: 150)
+
+                // Profile image or placeholder
+                if let picture = user.picture, let url = URL(string: picture) {
+                    // Load image from URL
+                    AsyncImage(url: url) { image in
+                        image.resizable()
+                            .scaledToFill()
+                            .frame(width: 120, height: 120)
+                            .clipShape(Circle())
+                            .offset(y: 100)
+                    } placeholder: {
+                        Circle()
+                            .fill(Color.purple)
+                            .frame(width: 120, height: 120)
+                            .overlay(
+                                Image(systemName: "person.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 60, height: 60)
+                                    .foregroundColor(.white)
+                            )
+                            .offset(y: 60)
+                    }
+                } else {
+                    // Default placeholder image
                     Circle()
-                        .fill(Color.black)
-                        .frame(width: 150, height: 150)
-                    
-                    Image(systemName: "person.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
-                        .foregroundColor(.white)
+                        .fill(Color.purple)
+                        .frame(width: 120, height: 120)
+                        .overlay(
+                            Image(systemName: "person.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 60, height: 60)
+                                .foregroundColor(.white)
+                        )
+                        .offset(y: 60)
                 }
-                .offset(y: -100)
             }
-            VStack {
-                Text(fullname)
-                    .font(.title2)
+            .edgesIgnoringSafeArea(.top)
+
+            // Profile details (Name, Username, Description)
+            VStack(spacing: 8) {
+                Text("\(user.name) \(user.surname)") // Full name
+                    .font(.title3)
                     .bold()
-                    .foregroundColor(.white)
-                Text(username)
-                    .foregroundColor(.white)
-                    .padding(.bottom)
-                Text(description)
-                    .foregroundColor(.white)
+                    .foregroundStyle(Color("terciary"))
+
+                Text("@\(user.name.lowercased())") // Username (lowercased for simplicity)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+
+                Text(user.description) // User description
+                    .multilineTextAlignment(.center)
+                    .font(.footnote)
+                    .foregroundColor(.gray)
+                    .padding(.top, 15)
             }
-            .padding(.top, 40)
+            .padding(.top, 50)  // Adjust spacing below profile picture
+            .padding(.horizontal, 24)  // Adjust for wider screens
         }
-        .padding()
     }
 }
 
 #Preview {
-    ProfilePic()
+    ProfilePic(user: User(id: UUID(), name: "John", surname: "Doe", description: "Lorem ipsum dolor sit amet.", picture: nil, artists: [], genres: [], resonations: []))
 }

@@ -9,44 +9,25 @@ import SwiftUI
 
 struct OnboardingView: View {
     var body: some View {
-        TabView {
-            WelcomeView()
-            SecondSlideView()
-            ThirdSlideView()
-            FinalSlideView()
-        }
-        .tabViewStyle(PageTabViewStyle())
-    }
-}
-
-// Slide 1: Welcome View
-struct WelcomeView: View {
-    var body: some View {
-        ZStack {
-            Color.blue
-            VStack {
-                Text("Welcome!")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                Text("Thank you for joining us!")
-                    .padding(.top, 10)
-                    .font(.body)
+        ZStack{
+            Color("background").opacity(0.5)
+            TabView {
+                WelcomeView()
+                    .tag(OnboardingSlide.welcome)
+                IntroductionView()
+                    .tag(OnboardingSlide.introduction)
+                SignUpView()
+                    .tag(OnboardingSlide.signUp)
             }
-            .padding()
+            .tabViewStyle(PageTabViewStyle())
         }
+        .ignoresSafeArea()
     }
 }
-
-// Slide 2: A Text Slide
-struct SecondSlideView: View {
-    var body: some View {
-        VStack {
-            Text("Here's some information about our app.")
-                .font(.title)
-                .multilineTextAlignment(.center)
-                .padding()
-        }
-    }
+enum OnboardingSlide: Int, CaseIterable {
+    case welcome
+    case introduction
+    case signUp
 }
 
 // Slide 3: Another Text Slide
