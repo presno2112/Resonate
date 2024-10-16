@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ArtistGridView: View {
-    @StateObject var viewModel = ArtistViewModel() // Initialize with sample data
+    let viewModel = ArtistViewModel() // Initialize with sample data
     
     let columns = [
         GridItem(.flexible()),
@@ -44,15 +44,13 @@ struct ArtistGridView: View {
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 80, height: 80)
                                         .clipShape(Circle())
-                                        .overlay(Circle().stroke(Color.blue, lineWidth: 2)) // Optional border around the bubble
+                                        .overlay(Circle().stroke(Color.blue, lineWidth: 2)) 
                                 } else {
-                                    // Placeholder bubble
                                     Circle()
                                         .fill(Color.purple.opacity(0.4))
                                         .frame(width: 80, height: 80)
                                 }
                                 
-                                // Artist's name below the bubble
                                 Text(artist.name)
                                     .font(.caption)
                                     .foregroundColor(.black)
@@ -62,7 +60,7 @@ struct ArtistGridView: View {
                     .padding()
                 }
             }
-            .background(Color.purple.opacity(0.2)) // Background color to match your design
+            .background(Color.purple.opacity(0.2))
             .navigationTitle("Artists")
         }
     }

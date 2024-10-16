@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ResonateButton: View {
     // State properties to handle the scaling effect
+    @Binding var isPresented : Bool
     @State private var outerCircleScale: CGFloat = 1.0
     @State private var middleCircleScale: CGFloat = 1.0
     
@@ -26,6 +27,7 @@ struct ResonateButton: View {
                         outerCircleScale = 1.2
                     }
                 }
+                .padding()
             
             Circle()
                 .frame(width: 270, height: 270)
@@ -41,7 +43,7 @@ struct ResonateButton: View {
                     }
                 }
             Button{
-                
+                isPresented = true
             }label: { //Missing image
                 Image("Logo")
                     .resizable()
@@ -55,6 +57,6 @@ struct ResonateButton: View {
 }
 
 #Preview {
-    ResonateButton()
+    ResonateButton(isPresented: .constant(false))
 }
 
