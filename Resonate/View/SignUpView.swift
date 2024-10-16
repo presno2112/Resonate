@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct  SignUpView: View {
+    @State var name: String = ""
+    @State var username: String = ""
+    @State var password: String = ""
+    @State var confirmpassword: String = ""
+    
     var body: some View {
     
         VStack {
@@ -31,7 +36,7 @@ struct  SignUpView: View {
                 .font(.system(size: 20))
                 .padding(.top, 30)
             
-            TextField("", text: .constant(""))
+            TextField("", text: $name)
                 .padding(.vertical, -9)
                 .padding()
                 .background(Color.textField)
@@ -47,7 +52,7 @@ struct  SignUpView: View {
                 .padding(.trailing, 212)
                 .font(.system(size: 20))
             
-            TextField("", text: .constant(""))
+            TextField("", text: $username)
                 .padding(.vertical, -9)
                 .padding()
                 .background(Color.textField)
@@ -62,7 +67,7 @@ struct  SignUpView: View {
                 .padding(.trailing, 220)
                 .font(.system(size: 20))
             
-            TextField("", text: .constant(""))
+            TextField("", text: $password)
                 .padding(.vertical, -9)
                 .padding()
                 .background(Color.textField)
@@ -79,7 +84,7 @@ struct  SignUpView: View {
                 .font(.system(size: 18))
                 .padding(.top, 30)
             
-            TextField("", text: .constant(""))
+            TextField("", text: $confirmpassword)
                 .padding(.vertical, -9)
                 .padding()
                 .background(Color.textField)
