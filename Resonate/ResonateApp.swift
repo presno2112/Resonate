@@ -12,6 +12,7 @@ struct ResonateApp: App {
     var body: some Scene {
         WindowGroup {
             SignUpView()
+            
         }
     }
 }
