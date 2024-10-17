@@ -7,12 +7,14 @@
 
 import SwiftUI
 
-struct  SignUpView: View {
+struct SignUpView: View {
     @State var name: String = ""
     @State var username: String = ""
+    @AppStorage("isOnBoarding") var isOnBoarding: Bool = true // Default to true
+
     var body: some View {
-    
         VStack {
+            Spacer()
             Image("Logo")
                 .resizable()
                 .frame(width: 200, height: 200)
@@ -25,7 +27,6 @@ struct  SignUpView: View {
                 .font(.system(size: 38))
                 .padding(.top, -40)
            
-            Spacer()
             Text("Name")
                 .foregroundStyle(Color("primary"))
                 .padding(.trailing, 250)
@@ -33,16 +34,15 @@ struct  SignUpView: View {
                 .font(.system(size: 20))
                 .padding(.top, 30)
             
-            TextField("", text: .constant(""))
+            TextField("", text: $name)
                 .padding(.vertical, -6)
                 .padding()
                 .background(Color("aux2"))
-                    .cornerRadius(100)
-                    .padding()
-                    .padding(.top, -30)
-                    .padding(.leading, 25)
-                    .padding(.trailing, 25)
-            
+                .cornerRadius(100)
+                .padding()
+                .padding(.top, -30)
+                .padding(.leading, 25)
+                .padding(.trailing, 25)
             
             Text("Username")
                 .foregroundStyle(Color("primary"))
@@ -51,8 +51,7 @@ struct  SignUpView: View {
                 .font(.system(size: 20))
                 .padding(.top, 30)
             
-            
-            TextField("", text: .constant(""))
+            TextField("", text: $username)
                 .padding(.vertical, -6)
                 .padding()
                 .background(Color("aux2"))
@@ -62,10 +61,11 @@ struct  SignUpView: View {
                 .padding(.leading, 25)
                 .padding(.trailing, 25)
             
-                    
-            
-            Button("Sign Up"){
-                
+            Button("Sign Up") {
+                print(isOnBoarding)
+                print("   ")
+                isOnBoarding = false
+                print(isOnBoarding)
             }
             .buttonStyle(CustomButtonDark())
             .frame(width: 200)
