@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct  SignUpView: View {
+    @Environment(\.modelContext) var context
     @State var name: String = ""
     @State var username: String = ""
     var body: some View {
@@ -33,7 +34,7 @@ struct  SignUpView: View {
                 .font(.system(size: 20))
                 .padding(.top, 30)
             
-            TextField("", text: .constant(""))
+            TextField("", text: $name)
                 .padding(.vertical, -6)
                 .padding()
                 .background(Color("aux2"))
@@ -52,7 +53,7 @@ struct  SignUpView: View {
                 .padding(.top, 30)
             
             
-            TextField("", text: .constant(""))
+            TextField("", text: $username)
                 .padding(.vertical, -6)
                 .padding()
                 .background(Color("aux2"))
@@ -65,7 +66,10 @@ struct  SignUpView: View {
                     
             
             Button("Sign Up"){
-                
+                // Codigo para crear el usuario y agregarlo al modelo de SwiftData
+                // al hacer sign up
+                let newUser = UserSwiftData(name: name, username: username, artists: [])
+                context.insert(newUser)
             }
             .buttonStyle(CustomButtonDark())
             .frame(width: 200)

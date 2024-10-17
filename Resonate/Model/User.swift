@@ -6,8 +6,29 @@
 //
 
 import Foundation
+import SwiftData
 
+@Model
+class UserSwiftData {
+    @Attribute(.unique) var id = UUID()
+    var name: String
+    var username: String
+    var artists: [ArtistSwiftData]
+    
+    init(name: String, username: String, artists: [ArtistSwiftData]) {
+        self.id = UUID()
+        self.name = name
+        self.username = username
+        self.artists = artists
+    }
+    
+    // Static method to create a fetch request
+    static func fetchRequest() -> FetchDescriptor<UserSwiftData> {
+        return FetchDescriptor<UserSwiftData>()
+    }
+}
 
+// ESTO REALMENTE NO SE USA
 struct User: Identifiable, Codable, Equatable {
     var id = UUID()  // Unique identifier
     var name: String

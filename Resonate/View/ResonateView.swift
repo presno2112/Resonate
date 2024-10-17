@@ -34,8 +34,10 @@ struct ResonateView: View {
                 }
                 .navigationTitle("Local Chat")
                 
+                // Lo comente ya que esta usando el ArtistViewModel(), se deberia cambiar
+                // para usar el ArtistSwiftData Model
                 // Display the first received artist's name (as a test)
-                    Text("\(                 calculateArtistSimilarityPercentage(array1: localNetwork.receivedArtists, array2: ArtistViewModel().artists))%")
+//                    Text("\(                 calculateArtistSimilarityPercentage(array1: localNetwork.receivedArtists, array2: ArtistViewModel().artists))%")
                 if let firstArtist = localNetwork.receivedArtists.first {
                     Text("Received Artist: \(firstArtist.name)")
                         .padding()

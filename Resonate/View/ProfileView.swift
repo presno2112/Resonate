@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ProfileView: View {
+    // Context environment, parecido al modelContainer en donde se
+    // define la app, nos permite usar los modelos definidos
+    @Environment(\.modelContext) var context
     @State var show: Bool = false
     // Sample user data
     var user = User(
