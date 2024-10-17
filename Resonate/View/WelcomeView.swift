@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WelcomeView: View {
     @State private var isVisible = false
+    var onAnimationComplete: () -> Void
 
     var body: some View {
         VStack {
@@ -19,6 +20,7 @@ struct WelcomeView: View {
                 .opacity(isVisible ? 1 : 0)
                 .scaleEffect(isVisible ? 1 : 0.5)
                 .animation(.spring(duration: 1).delay(0.5), value: isVisible)
+
             Spacer()
 
             Text("Create,")
@@ -61,21 +63,26 @@ struct WelcomeView: View {
 
             Spacer()
 
-            Text("Swipe left to continue")
+            Text("Let's get started")
                 .foregroundStyle(.black)
-                .opacity(isVisible ? 1 : 0)  // Initially hidden
-                .scaleEffect(isVisible ? 1 : 0.5)  // Initially smaller
+                .opacity(isVisible ? 1 : 0)
+                .scaleEffect(isVisible ? 1 : 0.5)
                 .onAppear {
-                    withAnimation(Animation.snappy(duration: 3).delay(3.5)) {  // Final element to animate
+                    withAnimation(Animation.snappy(duration: 3).delay(3.5)) {
                         isVisible = true
                     }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
+                        onAnimationComplete()
+                    }
                 }
+
             Spacer()
         }
     }
 }
 
 #Preview {
-    WelcomeView()
+    WelcomeView(onAnimationComplete: {})
 }
+
 

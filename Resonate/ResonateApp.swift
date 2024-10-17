@@ -48,7 +48,7 @@ struct ResonateApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ProfileView()
+            HomeView()
         }
         // Esto nos permite usar cualquier modelo creado en SwiftData en nuestros views
         .modelContainer(appContainer)

@@ -10,20 +10,19 @@ import SwiftUI
 struct IntroductionView: View {
     var body: some View {
         ZStack {
-            ScrollView{
+            ScrollView {
                 VStack {
                     Image("Logo")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 250, height: 220)
                         .padding()
-                    
-                    
+
                     Text("Welcome to")
                         .fontDesign(.rounded)
                         .font(.system(size: 30))
                         .padding(.top, -45)
-                    
+
                     Text("Resonate")
                         .font(.system(size: 38))
                         .fontDesign(.monospaced)
@@ -31,8 +30,7 @@ struct IntroductionView: View {
                         .foregroundStyle(Color("terciary"))
                         .padding(.bottom, 50)
                         .padding(.top, -35)
-                    
-                    
+
                     Text("""
     An app designed to connect music lovers by comparing their tastes and fostering meaningful relationships.
     
@@ -42,26 +40,21 @@ struct IntroductionView: View {
                     .padding(.horizontal, 40)
                     .padding(.bottom, 40)
                     .multilineTextAlignment(.center)
-                    
+
                 }
-                
-                Button("Get Started") {
-                    
+
+                // NavigationLink to SignUpView
+                NavigationLink(destination: SignUpView()) {
+                    Text("Get Started")
                 }
                 .buttonStyle(CustomButtonLight())
                 .frame(width: 200)
+
                 Spacer()
-                
-                
-                
-                
-                
-                
             }
         }
     }
 }
-
 
 #Preview {
     IntroductionView()

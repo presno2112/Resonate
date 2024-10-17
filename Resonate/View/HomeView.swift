@@ -8,18 +8,14 @@
 import SwiftUI
 
 struct HomeView: View {
-    // State properties to handle the scaling effect
-    @State private var outerCircleScale: CGFloat = 1.0
-    @State private var middleCircleScale: CGFloat = 1.0
-    @State var isPresented: Bool = false
-    @AppStorage("isOnBoarding") var isOnBoarding:Bool = true
+    @AppStorage("isOnBoarding") var isOnBoarding: Bool = true
+    @State private var isPresented: Bool = false
     
     var body: some View {
         if isOnBoarding {
             OnboardingView()
-        }
-        else{
-            VStack(){
+        } else {
+            VStack {
                 Spacer()
                 Group {
                     Text("Tap to ") +
@@ -35,20 +31,20 @@ struct HomeView: View {
                 
                 Spacer()
                 Group{
-                    Text("Choose to be the ") + Text("Host").bold() + Text(" or the ") + Text("Guest").bold() + Text(" in your Resonation and share you music taste with your friends")
+                    Text("Choose to be the ") + Text("Host").bold() + Text(" or the ") + Text("Guest").bold() + Text(" in your Resonation and share your music taste with your friends")
                 }
                 .frame(width: 280)
                 .multilineTextAlignment(.center)
                 Spacer()
-                Button("Go to your profile"){
-                    
+                Button("Go to your profile") {
+                    // Navigate to profile
                 }
                 .buttonStyle(CustomButtonLight())
                 .frame(width: 200)
                 .padding()
                 Spacer()
             }
-            .sheet(isPresented: $isPresented){
+            .sheet(isPresented: $isPresented) {
                 ResonateView()
             }
         }
@@ -58,4 +54,5 @@ struct HomeView: View {
 #Preview {
     HomeView()
 }
+
 
