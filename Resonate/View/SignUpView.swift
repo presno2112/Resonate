@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct SignUpView: View {
+struct  SignUpView: View {
+    @Environment(\.modelContext) var context
     @State var name: String = ""
     @State var username: String = ""
     @AppStorage("isOnBoarding") var isOnBoarding: Bool = true // Default to true
@@ -60,12 +61,12 @@ struct SignUpView: View {
                 .padding(.top, -27)
                 .padding(.leading, 25)
                 .padding(.trailing, 25)
-            
-            Button("Sign Up") {
-                print(isOnBoarding)
-                print("   ")
-                isOnBoarding = false
-                print(isOnBoarding)
+
+            Button("Sign Up"){
+                // Codigo para crear el usuario y agregarlo al modelo de SwiftData
+                // al hacer sign up
+                let newUser = UserSwiftData(name: name, username: username, artists: [])
+                context.insert(newUser)
             }
             .buttonStyle(CustomButtonDark())
             .frame(width: 200)
