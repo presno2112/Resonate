@@ -42,7 +42,7 @@ struct ProfilePic: View {
                 } else {
                     // Default placeholder image
                     Circle()
-                        .fill(Color.purple)
+                        .fill(Color("terciary"))
                         .frame(width: 120, height: 120)
                         .overlay(
                             Image(systemName: "person.fill")
