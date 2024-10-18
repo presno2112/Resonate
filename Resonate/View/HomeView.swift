@@ -10,11 +10,17 @@ import SwiftUI
 struct HomeView: View {
     @AppStorage("isOnBoarding") var isOnBoarding: Bool = true
     @State private var isPresented: Bool = false
+    @State private var resonated: Bool = false
+    @StateObject private var localNetwork = LocalNetworkSessionCoordinator()
     
     var body: some View {
         if isOnBoarding {
             OnboardingView()
-        } else {
+        }
+        else if (localNetwork.isConnected || resonated) {
+            ResultsView(targetPercentage: 20)
+        }
+        else{
             NavigationStack {
                 VStack {
                     Spacer()
@@ -46,7 +52,7 @@ struct HomeView: View {
                 }
             }
             .sheet(isPresented: $isPresented) {
-                ResonateView()
+                ResonateView(isConnected : $resonated)
             }
         }
     }

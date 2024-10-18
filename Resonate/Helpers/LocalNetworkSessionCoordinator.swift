@@ -16,6 +16,10 @@ class LocalNetworkSessionCoordinator: NSObject, ObservableObject, MCSessionDeleg
     @Published private(set) var allDevices: Set<MCPeerID> = []
     @Published private(set) var connectedDevices: Set<MCPeerID> = []
     @Published private(set) var receivedArtists: [Artist] = [] // Received array of artists
+    
+    @Published var isConnected: Bool = false
+    @Published var resonationPercentage: CGFloat = 0.0  // Percentage for resonation
+    
     var otherDevices: Set<MCPeerID> {
         return allDevices.subtracting(connectedDevices)
     }
@@ -65,14 +69,23 @@ class LocalNetworkSessionCoordinator: NSObject, ObservableObject, MCSessionDeleg
         DispatchQueue.main.async {
             if state == .connected {
                 self.connectedDevices.insert(peerID)
+                self.isConnected = true
+                // Assuming you calculate the resonation percentage here
+                self.resonationPercentage = self.calculateResonationPercentage()
                 
-                // Automatically send artists to the connected peer
                 try? self.sendArtists(to: peerID)
             } else {
                 self.connectedDevices.remove(peerID)
+                self.isConnected = false
             }
-            self.objectWillChange.send() // Notify SwiftUI to update the view
+            self.objectWillChange.send()
         }
+    }
+    
+    private func calculateResonationPercentage() -> CGFloat {
+        // Custom logic to calculate the resonation percentage
+        // Replace this with actual comparison between artists, here it's a placeholder
+        return CGFloat.random(in: 50...100)
     }
     
     // Handle received data

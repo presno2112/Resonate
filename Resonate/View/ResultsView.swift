@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ResultsView: View {
     @State private var percentage: CGFloat = 0.0
+    @StateObject private var localNetwork = LocalNetworkSessionCoordinator()
     
     var targetPercentage: CGFloat
     
@@ -57,7 +58,7 @@ struct ResultsView: View {
             .padding(.top, 30)
             Spacer()
             Button("Save results"){
-                
+                localNetwork.isConnected = false
             }
             .buttonStyle(CustomButtonDark())
             .frame(width: 200)
