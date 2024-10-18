@@ -6,40 +6,50 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ProfileView: View {
-    // Context environment, parecido al modelContainer en donde se
-    // define la app, nos permite usar los modelos definidos
     @Environment(\.modelContext) var context
-    @State var show: Bool = false
-    // Sample user data
-    var user = User(
-        id: UUID(),
-        name: "Sebastian",
-        surname: "Presno",
-        description: "Swift developer and music enthusiast.",
-        picture: nil, // You can use a URL string here for a profile picture
-        artists: [],
-        genres: [],
-        resonations: []
-    )
+    @State private var show: Bool = false
+    @State private var username: String = ""
+    
+    // Filter users by username from UserDefaults
+    @Query private var fetchedUsers: [UserSwiftData]
+    
+    init() {
+        // Initialize the query with the username filter
+        let savedUsername = UserDefaults.standard.string(forKey: "username") ?? ""
+        _fetchedUsers = Query(filter: #Predicate<UserSwiftData> { $0.username == savedUsername })
+        _username = State(initialValue: savedUsername)
+    }
     
     var body: some View {
         VStack(spacing: 0) {
-            ProfilePic(user: user)
-                .padding(.top, 0)
-
-            ArtistsCarousel(title: "Artists", show: $show)
+            if let user = fetchedUsers.first {
+                // Assuming ProfilePic can handle UserSwiftData type
+                ProfilePic(user: user)
+                    .padding(.top, 0)
+                
+                ArtistsCarousel(
+                    title: "Artists",
+                    show: $show,
+                    artists: user.artists)
                 .padding(.horizontal, 20)
                 .padding(.top, 40)
-
-            Spacer()
+                
+                Spacer()
+            } else {
+                Text("No user found for username \(username)")
+                    .font(.headline)
+            }
         }
-        .edgesIgnoringSafeArea(.top)        .sheet(isPresented: $show) {
+        .edgesIgnoringSafeArea(.top)
+        .sheet(isPresented: $show) {
             ArtistGridView()
         }
     }
 }
+
 
 #Preview {
     ProfileView()

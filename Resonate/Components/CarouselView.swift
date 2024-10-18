@@ -7,17 +7,13 @@
 
 import SwiftUI
 
-struct carouselElement {
-    var image: Image
-    var name: String
-}
 
 struct ArtistView: View {
-    var element: carouselElement
+    var element: ArtistSwiftData
     
     var body: some View {
         VStack {
-            element.image
+            Image(element.image!)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 60, height: 60)
@@ -31,19 +27,21 @@ struct ArtistView: View {
 }
 
 struct ArtistsCarousel: View {
-    @State private var elements: [carouselElement] = []
-    @State var title: String = ""
+    var title: String
     @Binding var show: Bool
+    var artists: [ArtistSwiftData]
     
     var body: some View {
+        GeometryReader { geometry in
             HStack(alignment: .top, spacing: 10) {
                 VStack(alignment: .leading) {
                     Text(title)
                         .font(.headline)
                         .padding(.bottom, 5)
-                    Button{
+                    
+                    Button {
                         show = true
-                    }label: {
+                    } label: {
                         Text("+")
                             .font(.largeTitle)
                             .bold()
@@ -55,34 +53,32 @@ struct ArtistsCarousel: View {
                 }
                 Spacer()
                 
+                // Make the ScrollView take the full available width
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack (spacing: 5) {
-                        ForEach(elements.indices, id: \.self) {
-                            index in ArtistView(element: elements[index])
+                    HStack(spacing: 5) {
+                        ForEach(artists.indices, id: \.self) { index in
+                            ArtistView(element: artists[index])
                                 .padding(.top, 35)
-                                .frame(width: 60)
+                                .frame(width: geometry.size.width / 5) // Dynamically size based on screen width
                         }
                     }
                 }
             }
+            .frame(minWidth: geometry.size.width)
             .padding()
-        }
-
-        private func addElement() {
-            // Logic to add a new element
-            let newElement = carouselElement(image: Image(systemName: "photo"), name: "\(title)\(elements.count)")
-            elements.append(newElement)
-        }
-}
-
-struct CarouselView: View {
-    var body: some View {
-        VStack {
-            ArtistsCarousel(title: "Artists", show: .constant(false))
-            ArtistsCarousel(title: "History", show: .constant(false))
         }
     }
 }
-#Preview {
-    CarouselView()
-}
+
+
+//struct CarouselView: View {
+//    var body: some View {
+//        VStack {
+//            ArtistsCarousel(title: "Artists", show: .constant(false))
+//            ArtistsCarousel(title: "History", show: .constant(false))
+//        }
+//    }
+//}
+//#Preview {
+//    CarouselView()
+//}
