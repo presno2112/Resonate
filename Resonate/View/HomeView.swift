@@ -17,8 +17,8 @@ struct HomeView: View {
         if isOnBoarding {
             OnboardingView()
         }
-        else if (localNetwork.isConnected || resonated) {
-            ResultsView(targetPercentage: 20)
+        else if (resonated) {
+            ResultsView(targetPercentage: 82)
         }
         else{
             NavigationStack {

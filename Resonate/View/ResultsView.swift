@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ResultsView: View {
     @State private var percentage: CGFloat = 0.0
-    @StateObject private var localNetwork = LocalNetworkSessionCoordinator()
     
     var targetPercentage: CGFloat
     
@@ -17,8 +16,8 @@ struct ResultsView: View {
         VStack {
             Spacer()
             Group{
-                Text("Username ").bold().foregroundStyle(Color("terciary")) +
-                Text("and ") + Text("Username\n ").bold().foregroundStyle(Color("terciary")) + Text("level of resonation is")
+                Text("Sebastian ").bold().foregroundStyle(Color("terciary")) +
+                Text("and ") + Text("Gustavo's\n ").bold().foregroundStyle(Color("terciary")) + Text("level of resonation is")
             }
             .padding()
             .font(.title2)
@@ -58,7 +57,7 @@ struct ResultsView: View {
             .padding(.top, 30)
             Spacer()
             Button("Save results"){
-                localNetwork.isConnected = false
+                
             }
             .buttonStyle(CustomButtonDark())
             .frame(width: 200)

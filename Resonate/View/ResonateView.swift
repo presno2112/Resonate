@@ -10,7 +10,6 @@ import SwiftUI
 struct ResonateView: View {
     @StateObject private var localNetwork = LocalNetworkSessionCoordinator()
     @Binding var isConnected: Bool
-    @Binding var percentage: Float
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -46,10 +45,7 @@ struct ResonateView: View {
                                         withAnimation {
                                             isConnected = true
                                         }
-                                        // Delay the dismissal slightly
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                             dismiss()
-                                        }
                                     }
                                 }
                             }
