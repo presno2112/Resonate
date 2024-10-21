@@ -9,35 +9,27 @@ import SwiftUI
 import SwiftData
 
 struct ArtistGridView: View {
-    // Context environment, parecido al modelContainer en donde se
-    // define la app, nos permite usar los modelos definidos
     @Environment(\.modelContext) var context
-    // En este query estamos fetching a todos los artistas y ordenandolos
-    // por nombre
     @Query(sort: \ArtistSwiftData.name) var dataArtists: [ArtistSwiftData]
-    // Variable que estoy usando para testear que estamos obteniendo el
-    // primer usuario del modelo con la funcion fetchFirstUser()
     @State private var fetchedUser: UserSwiftData? = nil
+    @Environment(\.dismiss) var dismiss
     
     let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ] // Adjust number of columns based on desired layout
+        GridItem(.flexible()), GridItem(.flexible()),
+        GridItem(.flexible()), GridItem(.flexible())
+    ]
     
     var body: some View {
         NavigationView {
             VStack {
                 // Search bar
                 HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
+                    Image(systemName: "magnifyingglass").foregroundColor(.gray)
                     TextField("Find your favorite artist", text: .constant(""))
                         .textFieldStyle(PlainTextFieldStyle())
                 }
                 .padding()
-                .background(Color.white)
+                .background(Color("aux2"))
                 .cornerRadius(10)
                 .padding()
 
@@ -48,21 +40,24 @@ struct ArtistGridView: View {
                             VStack {
                                 Button(action: {
                                     print("Tapped \(artist.name)")
-                                    if let fetchedUser {
-                                        fetchedUser.artists.append(artist)
-                                        try! context.save()
-                                    } else {
-                                        print("No user found")
-                                    }
+                                    addArtistToUser(artist: artist) // Function to add artist
+                                    dismiss()
                                 }) {
-                                    Image("charlixcx") // Assuming you have image assets named like "rock_icon"
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 80, height: 80)
-                                        .clipShape(Circle())
-                                        .overlay(Circle().stroke(Color.black, lineWidth: 2))
+                                    if let imageName = artist.image {
+                                        Image(imageName)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 80, height: 80)
+                                            .clipShape(Circle())
+                                    } else {
+                                        Image(systemName: "person.circle.fill")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 80, height: 80)
+                                            .clipShape(Circle())
                                     }
-                                
+                                }
+
                                 Text(artist.name)
                                     .font(.caption)
                                     .foregroundColor(.black)
@@ -72,24 +67,39 @@ struct ArtistGridView: View {
                     .padding()
                 }
             }
-            .background(Color.purple.opacity(0.2))
             .navigationTitle("Artists")
         }
         .onAppear {
-            saveDummyUser()
-            fetchFirstUser()
+            fetchFirstUser() // Fetch user when the view appears
         }
     }
-    
-    // Funcion para crear un usuario dummy para poder probar el
-    // insertar un artista en su arreglo de artistas
-    private func saveDummyUser() {
-        let newUser = UserSwiftData(name: "Gustavo", username: "gus.vasac", artists: [])
-        context.insert(newUser)
+
+    // MARK: - Functions
+
+    // Add the artist to the user's artist list
+    private func addArtistToUser(artist: ArtistSwiftData) {
+        guard let user = fetchedUser else {
+            print("No user found")
+            return
+        }
+
+        if !user.artists.contains(where: { $0.id == artist.id }) {
+            // Append the artist to the user's artist list
+            user.artists.append(artist)
+            
+            // Save the updated user data to the context
+            do {
+                try context.save()
+                print("Artist \(artist.name) added to user's collection")
+            } catch {
+                print("Failed to save updated user: \(error)")
+            }
+        } else {
+            print("Artist \(artist.name) already in user's collection")
+        }
     }
-    
-    // Funcion para obtener el primer usuario del modelo
-    // UserSwiftData
+
+    // Fetch the first user from the model
     private func fetchFirstUser() {
         let fetchRequest = UserSwiftData.fetchRequest()
         do {
@@ -100,6 +110,8 @@ struct ArtistGridView: View {
         }
     }
 }
+
+
 
 #Preview {
     ArtistGridView()

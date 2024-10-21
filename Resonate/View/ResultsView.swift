@@ -16,8 +16,8 @@ struct ResultsView: View {
         VStack {
             Spacer()
             Group{
-                Text("Username ").bold().foregroundStyle(Color("terciary")) +
-                Text("and ") + Text("Username\n ").bold().foregroundStyle(Color("terciary")) + Text("level of resonation is")
+                Text("Sebastian ").bold().foregroundStyle(Color("terciary")) +
+                Text("and ") + Text("Gustavo's\n ").bold().foregroundStyle(Color("terciary")) + Text("level of resonation is")
             }
             .padding()
             .font(.title2)

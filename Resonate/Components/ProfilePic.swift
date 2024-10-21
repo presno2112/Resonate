@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfilePic: View {
-    var user: User // Accepting User object
+    var user: UserSwiftData // Accepting User object
 
     var body: some View {
         VStack {
@@ -18,7 +18,7 @@ struct ProfilePic: View {
                     .frame(height: 150)
 
                 // Profile image or placeholder
-                if let picture = user.picture, let url = URL(string: picture) {
+                if let picture = user.image, let url = URL(string: picture) {
                     // Load image from URL
                     AsyncImage(url: url) { image in
                         image.resizable()
@@ -42,7 +42,7 @@ struct ProfilePic: View {
                 } else {
                     // Default placeholder image
                     Circle()
-                        .fill(Color.purple)
+                        .fill(Color("terciary"))
                         .frame(width: 120, height: 120)
                         .overlay(
                             Image(systemName: "person.fill")
@@ -58,7 +58,7 @@ struct ProfilePic: View {
 
             // Profile details (Name, Username, Description)
             VStack(spacing: 8) {
-                Text("\(user.name) \(user.surname)") // Full name
+                Text("\(user.name)") // Full name
                     .font(.title3)
                     .bold()
                     .foregroundStyle(Color("terciary"))
@@ -67,7 +67,7 @@ struct ProfilePic: View {
                     .font(.subheadline)
                     .foregroundColor(.gray)
 
-                Text(user.description) // User description
+                Text("A very enthusiastic person. I love music and making new friends 😃") // User description
                     .multilineTextAlignment(.center)
                     .font(.footnote)
                     .foregroundColor(.gray)
@@ -78,7 +78,7 @@ struct ProfilePic: View {
         }
     }
 }
-
-#Preview {
-    ProfilePic(user: User(id: UUID(), name: "John", surname: "Doe", description: "Lorem ipsum dolor sit amet.", picture: nil, artists: [], genres: [], resonations: []))
-}
+//
+//#Preview {
+//    ProfilePic(user: User(id: UUID(), name: "John", surname: "Doe", description: "Lorem ipsum dolor sit amet.", picture: nil, artists: [], genres: [], resonations: []))
+//}

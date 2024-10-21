@@ -11,6 +11,7 @@ struct  SignUpView: View {
     @Environment(\.modelContext) var context
     @State var name: String = ""
     @State var username: String = ""
+    @State private var showAlert: Bool = false
     @AppStorage("isOnBoarding") var isOnBoarding: Bool = true // Default to true
 
     var body: some View {
@@ -53,6 +54,8 @@ struct  SignUpView: View {
                 .padding(.top, 30)
             
             TextField("", text: $username)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
                 .padding(.vertical, -6)
                 .padding()
                 .background(Color("aux2"))
@@ -65,8 +68,15 @@ struct  SignUpView: View {
             Button("Sign Up"){
                 // Codigo para crear el usuario y agregarlo al modelo de SwiftData
                 // al hacer sign up
-                let newUser = UserSwiftData(name: name, username: username, artists: [])
-                context.insert(newUser)
+                if name.isEmpty || username.isEmpty {
+                    showAlert = true
+                }
+                else{
+                    let newUser = UserSwiftData(name: name, username: username, artists: [])
+                    context.insert(newUser)
+                    saveUserToUserDefaults(username: username)
+                    isOnBoarding = false
+                }
             }
             .buttonStyle(CustomButtonDark())
             .frame(width: 200)
@@ -74,6 +84,14 @@ struct  SignUpView: View {
             Spacer()
             Spacer()
         }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Input Required"), message: Text("Please fill in the required fields."), dismissButton: .default(Text("OK")))
+        }
+    }
+    func saveUserToUserDefaults(username: String) {
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(username, forKey: "username")
+        print(userDefaults.string(forKey: "username") ?? "No name")
     }
 }
 

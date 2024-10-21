@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Model
 class UserSwiftData {
@@ -14,6 +15,7 @@ class UserSwiftData {
     var name: String
     var username: String
     var artists: [ArtistSwiftData]
+    var image : String?
     
     init(name: String, username: String, artists: [ArtistSwiftData]) {
         self.id = UUID()
